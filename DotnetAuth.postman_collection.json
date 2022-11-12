@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "ff979806-ea31-46d9-9f33-4844147bd998",
+		"name": "DotnetAuth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET /protected",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7284/protected",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7284",
+					"path": [
+						"protected"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /auth/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"some@email.com\",\r\n  \"password\": \"Test123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7284/auth/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7284",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"some@email.com\",\r\n  \"password\": \"Test123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7284/logout",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7284",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /authenticate2fa",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7284/authenticate2fa",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7284",
+					"path": [
+						"authenticate2fa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /auth/validate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvbWVAZW1haWwuY29tIiwibmJmIjoxNjYxOTMyNTY0LCJleHAiOjE2NjE5NjEzNjQsImlhdCI6MTY2MTkzMjU2NCwiaXNzIjoiRWFzdENvYXN0IiwiYXVkIjoiQXVkaWVuY2UifQ.u1tVw41Yg3OfrGPOBw7sBht02odJTyTJF1nI2lKcfpA",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7284/auth/validate",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7284",
+					"path": [
+						"auth",
+						"validate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

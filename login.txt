@@ -1,0 +1,6 @@
+{
+  "email": "some@email.com",
+  "password": "Test123!"
+}
+
+https://localhost:7284/swagger/index.html
