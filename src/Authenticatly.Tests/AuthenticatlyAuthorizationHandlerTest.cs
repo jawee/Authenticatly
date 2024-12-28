@@ -13,8 +13,8 @@ namespace Authenticatly.Tests;
 [TestClass]
 public class AuthenticatlyAuthorizationHandlerTest
 {
-    private Mock<ILogger<AuthenticatlyAuthorizationHandler>> _logger;
-    private Mock<ITokenService> _tokenService;
+    private Mock<ILogger<AuthenticatlyAuthorizationHandler>> _logger = null!;
+    private Mock<ITokenService> _tokenService = null!;
 
     [TestInitialize]
     public void Setup()
@@ -28,7 +28,7 @@ public class AuthenticatlyAuthorizationHandlerTest
         _tokenService.Setup(x => x.TokenIsValid(It.IsAny<string>())).Returns(true);
         var handler = new AuthenticatlyAuthorizationHandler(_logger.Object, _tokenService.Object);
         var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers.Add("Authorization", new StringValues("Bearer asdfasdf"));
+        httpContext.Request.Headers.Append("Authorization", new StringValues("Bearer asdfasdf"));
 
         var authorizationHandlerContext = new AuthorizationHandlerContext(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new ClaimsPrincipal(), httpContext);
 
@@ -44,7 +44,7 @@ public class AuthenticatlyAuthorizationHandlerTest
 
         var handler = new AuthenticatlyAuthorizationHandler(_logger.Object, _tokenService.Object);
         var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers.Add("Authorization", new StringValues("Bearer asdfasdf"));
+        httpContext.Request.Headers.Append("Authorization", new StringValues("Bearer asdfasdf"));
 
         var authorizationHandlerContext = new AuthorizationHandlerContext(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new ClaimsPrincipal(), httpContext);
 

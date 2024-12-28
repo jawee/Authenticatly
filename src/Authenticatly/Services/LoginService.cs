@@ -33,7 +33,7 @@ internal class LoginService : ILoginService
         {
             AdditionalProperties = additionalParameters
         };
-        var userId = mfaTokenService.GetUserIdFromMfaToken(request.MfaToken);
+        var userId = await mfaTokenService.GetUserIdFromMfaToken(request.MfaToken);
 
         if (string.IsNullOrEmpty(userId))
         {
@@ -129,7 +129,7 @@ internal class LoginService : ILoginService
 
     private async Task<TUser?> FindUserByMfaToken<TUser>(string mfaToken, UserManager<TUser> userManager) where TUser : IdentityUser
     {
-        var userId = _mfaTokenService.GetUserIdFromMfaToken(mfaToken);
+        var userId = await _mfaTokenService.GetUserIdFromMfaToken(mfaToken);
         await _mfaTokenService.RemoveTokenAsync(mfaToken);
         if (userId == null)
         {

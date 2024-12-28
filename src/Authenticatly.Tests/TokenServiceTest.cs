@@ -12,8 +12,8 @@ namespace Authenticatly.Tests;
 [TestClass]
 public class TokenServiceTest
 {
-    private ITokenService _service;
-    private IdentityUser _user;
+    private TokenService _service = null!;
+    private IdentityUser _user = null!;
 
     [TestInitialize]
     public void Setup()
@@ -26,8 +26,8 @@ public class TokenServiceTest
             Issuer = "TestIssuer",
             TokenValidTimeInMinutes = 10
         };
-        _service = new TokenService(logger.Object, Options.Create(authOpts), new JwtSecurityTokenHandler());
-        _user = new IdentityUser
+        _service = new(logger.Object, Options.Create(authOpts), new JwtSecurityTokenHandler());
+        _user = new()
         {
             UserName = "some@email.com",
             Email = "some@email.com"
@@ -40,7 +40,7 @@ public class TokenServiceTest
 
         var claims = new List<Claim>()
         {
-            new Claim (ClaimTypes.Email, _user.Email)
+            new(ClaimTypes.Email, _user.Email!)
         };
 
         var token = _service.CreateTokenForUser(_user, claims);
@@ -79,7 +79,7 @@ public class TokenServiceTest
     {
         var claims = new List<Claim>()
         {
-            new Claim (ClaimTypes.Email, _user.Email)
+            new(ClaimTypes.Email, _user.Email!)
         };
 
         var token = _service.CreateTokenForUser(_user, claims);

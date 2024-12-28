@@ -5,7 +5,6 @@ using ExampleApi.Dtos;
 using ExampleApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace ExampleApi.Controllers;
 
@@ -13,14 +12,13 @@ namespace ExampleApi.Controllers;
 [ApiController]
 public class SomeResourceController : ControllerBase
 {
-
     private readonly MyDbContext _context;
+
     public SomeResourceController(MyDbContext context)
-    { 
-        _context = context; 
+    {
+        _context = context;
     }
 
-    // GET: <SomeResourceController>
     [AuthenticatlyAuthorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SomeResourceDto>>> Get()

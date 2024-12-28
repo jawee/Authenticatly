@@ -8,8 +8,8 @@ public class ClaimsInjectionService : IClaimsInjectionService
     public Task<List<Claim>> GetExtraClaimsForUserId(string userId)
     {
         var claims = new List<Claim>() {
-            new Claim("TestType", "TestValue"),
-            new Claim("UserId", userId) 
+            new("TestType", "TestValue"),
+            new("UserId", userId) 
         };
         return Task.FromResult(claims);
     }

@@ -7,7 +7,7 @@ public static class SomeResourceExtensions
 {
     public static SomeResourceDto ToDto(this SomeResource model)
     {
-        return new SomeResourceDto
+        return new()
         {
             Id = model.Id,
             Name = model.Name

@@ -11,7 +11,7 @@ public class ProtectedHomeController : ControllerBase
 
     [HttpGet]
     [AuthenticatlyAuthorize]
-    public async Task<IActionResult> Get()
+    public IActionResult Get()
     {
         if (HttpContext.Items[AuthenticatlyAuthConstants.AUTHORIZED_ATTRIBUTES_KEY] is not Dictionary<string, string> authorizedAttributes)
         {

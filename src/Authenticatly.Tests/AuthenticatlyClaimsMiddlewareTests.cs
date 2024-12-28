@@ -15,7 +15,7 @@ public class AuthenticatlyClaimsMiddlewareTests
     [TestMethod]
     public async Task AuthenticatlyClaimsMiddlewareTest()
     {
-        var claimsList = new List<Claim> { new Claim(ClaimTypes.Email, "asdf@asdf.se"), new Claim("CustomerId", "1") };
+        var claimsList = new List<Claim> { new(ClaimTypes.Email, "asdf@asdf.se"), new("CustomerId", "1") };
         var claimsIdentity = new ClaimsIdentity(claimsList);
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
@@ -25,7 +25,7 @@ public class AuthenticatlyClaimsMiddlewareTests
         var httpContext = new DefaultHttpContext();
         var req = httpContext.Request;
 
-        req.Headers.Add("Authorization", "Bearer asdf");
+        req.Headers.Append("Authorization", "Bearer asdf");
 
         RequestDelegate next = async (hc) => { await Task.CompletedTask; };
         var eccm = new AuthenticatlyClaimsMiddleware(next, tokenServiceMock.Object);
