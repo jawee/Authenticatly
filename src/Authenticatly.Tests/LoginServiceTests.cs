@@ -26,7 +26,7 @@ public class LoginServiceTests
     private AuthenticateRequest _authReq = null!;
     private IdentityUser _user = null!;
     private IOptions<AuthenticatlyAuthOptions> _optionsAccessor = null!;
-    private ILoginService _loginService = null!;
+    private LoginService _loginService = null!;
     private Mock<IMfaTokenService> _mfaTokenServiceMock = null!;
     private Mock<IClaimsInjectionService> _claimsInjectionServiceMock = null!;
     private Mock<ISendSmsService> _sendSmsServiceMock = null!;
@@ -222,7 +222,11 @@ public class LoginServiceTests
     [TestMethod]
     public async Task Challenge_EmptyUserId_ThrowsUnauthorizedException()
     {
-        var req = new ChallengeRequest();
+        var req = new ChallengeRequest
+        {
+            MfaToken = "",
+            ChallengeType = "",
+        };
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync("");
 
         await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
@@ -231,7 +235,11 @@ public class LoginServiceTests
     [TestMethod]
     public async Task Challenge_UserNotFound_ThrowsUnauthorizedException()
     {
-        var req = new ChallengeRequest();
+        var req = new ChallengeRequest
+        {
+            MfaToken = "",
+            ChallengeType = "",
+        };
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync(USER_ID);
 
         await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));

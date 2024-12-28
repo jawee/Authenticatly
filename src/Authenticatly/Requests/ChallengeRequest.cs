@@ -2,6 +2,6 @@
 
 internal class ChallengeRequest
 {
-    public string MfaToken { get; set; }
-    public string ChallengeType { get; set; }
+    public required string MfaToken { get; set; }
+    public required string ChallengeType { get; set; }
 }

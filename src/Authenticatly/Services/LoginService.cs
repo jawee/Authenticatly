@@ -29,10 +29,6 @@ internal class LoginService : ILoginService
     public async Task<ChallengeResponse> Challenge<TUser>(ChallengeRequest request, UserManager<TUser> userManager, IMfaTokenService mfaTokenService, ISendSmsService sendSmsService) where TUser : IdentityUser
     {
         var additionalParameters = new Dictionary<string, string>();
-        var challengeResp = new ChallengeResponse
-        {
-            AdditionalProperties = additionalParameters
-        };
         var userId = await mfaTokenService.GetUserIdFromMfaToken(request.MfaToken);
 
         if (string.IsNullOrEmpty(userId))
@@ -54,8 +50,6 @@ internal class LoginService : ILoginService
                 throw new ForbiddenException("Could not send sms.");
             }
 
-            challengeResp.BindingMethod = "prompt";
-            challengeResp.ChallengeType = "sms";
             var smsToken = await userManager.GenerateTwoFactorTokenAsync(user, "Phone");
             var isSent = await sendSmsService.SendSms(smsToken, user.PhoneNumber, userId);
             if (!isSent)
@@ -63,7 +57,15 @@ internal class LoginService : ILoginService
                 throw new ForbiddenException("Could not send sms.");
             }
             additionalParameters.Add("phonenumber", user.PhoneNumber[^4..]);
-            return challengeResp;
+
+            var challengeResponse = new ChallengeResponse 
+            {
+                BindingMethod = "prompt",
+                ChallengeType = "sms",
+                OobCode = "",
+                AdditionalProperties = additionalParameters,
+            };
+            return challengeResponse;
         }
         throw new UnsupportedChallengeTypeException();
     }
