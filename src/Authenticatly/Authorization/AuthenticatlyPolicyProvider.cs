@@ -16,15 +16,15 @@ public class AuthenticatlyPolicyProvider : IAuthorizationPolicyProvider
 
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => _fallbackPolicyProvider.GetDefaultPolicyAsync();
 
-    public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
+    public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
         if (policyName.StartsWith(AuthenticatlyPolicyNames.AuthenticatlyPolicy, StringComparison.OrdinalIgnoreCase))
         {
             var policy = new AuthorizationPolicyBuilder();
             policy.AddRequirements(new AuthenticatlyAuthorizeRequirement());
-            return Task.FromResult(policy.Build());
+            return policy.Build();
         }
 
-        return _fallbackPolicyProvider.GetPolicyAsync(policyName);
+        return await _fallbackPolicyProvider.GetPolicyAsync(policyName);
     }
 }

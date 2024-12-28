@@ -27,18 +27,18 @@ public class AuthV1EndpointsTests
         var responseBody = await resp1.Content.ReadAsStringAsync();
         var responseDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
 
-        var resp2 = await client.PostAsJsonAsync("/auth/v1/login", new AuthenticateRequest { Email = TestConstants.Username, RefreshToken = responseDict["refreshToken"] as string });
+        var resp2 = await client.PostAsJsonAsync("/auth/v1/login", new AuthenticateRequest { Email = TestConstants.Username, RefreshToken = responseDict!["refreshToken"] as string });
 
         responseBody = await resp2.Content.ReadAsStringAsync();
         responseDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
 
 
-        var resp3 = await client.PostAsJsonAsync("/auth/v1/login", new AuthenticateRequest { Email = TestConstants.Username, RefreshToken = responseDict["refreshToken"] as string });
+        var resp3 = await client.PostAsJsonAsync("/auth/v1/login", new AuthenticateRequest { Email = TestConstants.Username, RefreshToken = responseDict!["refreshToken"] as string });
         responseBody = await resp3.Content.ReadAsStringAsync();
         responseDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
 
         Assert.AreEqual(HttpStatusCode.OK, resp3.StatusCode);
-        Assert.IsTrue(responseDict.ContainsKey("accessToken"));
+        Assert.IsTrue(responseDict!.ContainsKey("accessToken"));
         Assert.IsTrue(responseDict.ContainsKey("tokenType"));
         Assert.IsTrue(responseDict.ContainsKey("expiresIn"));
         Assert.IsTrue(responseDict.ContainsKey("scope"));
@@ -100,7 +100,7 @@ public class AuthV1EndpointsTests
         var loginRespBody = await loginResponse.Content.ReadAsStringAsync();
         var loginRespDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(loginRespBody);
 
-        var challengeResponse = await client.PostAsJsonAsync("/auth/v1/challenge", new ChallengeRequest { ChallengeType = "sms", MfaToken = loginRespDict["mfaToken"] as string });
+        var challengeResponse = await client.PostAsJsonAsync("/auth/v1/challenge", new ChallengeRequest { ChallengeType = "sms", MfaToken = (loginRespDict!["mfaToken"] as string)! });
         var challengeResponseBody = await challengeResponse.Content.ReadAsStringAsync();
 
         var challengeResponseDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(challengeResponseBody);
@@ -139,7 +139,7 @@ public class AuthV1EndpointsTests
         var responseBody = await response.Content.ReadAsStringAsync();
         var responseDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
 
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {responseDict["accessToken"] as string}");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {responseDict!["accessToken"] as string}");
         var getProtectedResponse = await client.GetAsync("/protected");
 
         Assert.AreEqual(HttpStatusCode.OK, getProtectedResponse.StatusCode);

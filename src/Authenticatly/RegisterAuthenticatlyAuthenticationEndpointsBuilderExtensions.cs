@@ -24,9 +24,9 @@ public class AuthenticatlyAuthOptions : IOptions<AuthenticatlyAuthOptions>
 {
     public int TokenValidTimeInMinutes { get; set; } = 10;
     public string Issuer { get; set; } = "Authenticatly";
-    public string Audience { get; set; }
-    public string SymmetricSecurityKey { get; set; }
-    public string AllowedRolesString { get; set; }
+    public string Audience { get; set; } = "";
+    public required string SymmetricSecurityKey { get; set; }
+    public string AllowedRolesString { get; set; } = "";
 
     public List<string> AllowedRoles
     {
@@ -113,6 +113,10 @@ public static class RegisterAuthenticatlyAuthenticationEndpointsBuilderExtension
             return "not logged in";
         }
         var user = await userManager.FindByEmailAsync(emailClaim.Value);
+        if (user is null)
+        {
+            return "not logged in";
+        }
         await userManager.RemoveAuthenticationTokenAsync(user, options.Issuer, "RefreshToken");
         return "logged out";
     }

@@ -49,6 +49,11 @@ internal class LoginService : ILoginService
 
         if (request.ChallengeType.Equals("sms"))
         {
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                throw new ForbiddenException("Could not send sms.");
+            }
+
             challengeResp.BindingMethod = "prompt";
             challengeResp.ChallengeType = "sms";
             var smsToken = await userManager.GenerateTwoFactorTokenAsync(user, "Phone");
@@ -74,7 +79,7 @@ internal class LoginService : ILoginService
             }
 
             ////MFA sms stuff
-            var valid = await userManager.VerifyTwoFactorTokenAsync(user, "Phone", request.Otp);
+            var valid = await userManager.VerifyTwoFactorTokenAsync(user, "Phone", request.Otp ?? "");
             if (!valid)
             {
                 throw new OtpInvalidException();
@@ -88,6 +93,11 @@ internal class LoginService : ILoginService
             var options = optionsAccessor.Value;
 
             var user = await userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+            {
+                throw new LoginFailedException();
+            }
+
             var roles = await userManager.GetRolesAsync(user);
 
             if (options.AllowedRoles.Count != 0)
@@ -107,6 +117,11 @@ internal class LoginService : ILoginService
                 }
 
                 throw new UnauthorizedException();
+            }
+
+            if (string.IsNullOrEmpty(request.Password))
+            {
+                throw new LoginFailedException();
             }
 
             var result = await userManager.CheckPasswordAsync(user, request.Password);
@@ -157,6 +172,10 @@ internal class LoginService : ILoginService
 
         if (!claims.Any(x => x.Type == ClaimTypes.Email))
         {
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                throw new Exception("User needs to have email");
+            }
             var claim = new Claim(ClaimTypes.Email, user.Email);
             var res = await userManager.AddClaimAsync(user, claim);
             claims.Add(claim);
