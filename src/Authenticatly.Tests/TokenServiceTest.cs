@@ -21,7 +21,7 @@ public class TokenServiceTest
         var logger = new Mock<ILogger<TokenService>>();
         var authOpts = new AuthenticatlyAuthOptions
         {
-            SymmetricSecurityKey = "mysupersecrettestkey",
+            SymmetricSecurityKey = "mysupersecrettestkeythatmustbe32charactersormore",
             Audience = "TestAudience",
             Issuer = "TestIssuer",
             TokenValidTimeInMinutes = 10

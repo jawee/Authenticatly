@@ -23,7 +23,7 @@ builder.Services.AddAuthenticatlyAuthentication<DotnetAuthIdentityUser>(options 
     options.Issuer = "Authenticatly";
     options.TokenValidTimeInMinutes = 10;
     options.Audience = "Authenticatly.ExampleApi";
-    options.SymmetricSecurityKey = "mysupersecret_secretkey!123";
+    options.SymmetricSecurityKey = "Mysupersecret_secretkey!123456789";
     options.AllowedRolesString = "PowerUser;Receptionist";
 });
 
