@@ -32,14 +32,12 @@ public class MfaTokenService : IMfaTokenService
         return value;
     }
 
-    private string GenerateToken()
+    private static string GenerateToken()
     {
         var randomNumber = new byte[32];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 
     public async Task<string?> GetUserIdFromMfaToken(string token)

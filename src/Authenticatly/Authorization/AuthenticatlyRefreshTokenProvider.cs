@@ -22,14 +22,12 @@ public class AuthenticatlyRefreshTokenProvider<TUser> : IUserTwoFactorTokenProvi
         return Task.FromResult(false);
     }
 
-    private string GenerateRefreshToken()
+    private static string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 
     public async Task<string> GenerateAsync(string purpose, UserManager<TUser> manager, TUser user)
@@ -39,7 +37,7 @@ public class AuthenticatlyRefreshTokenProvider<TUser> : IUserTwoFactorTokenProvi
             throw new InvalidOperationException();
         }
 
-        var refreshToken = GenerateRefreshToken();
+        var refreshToken = AuthenticatlyRefreshTokenProvider<TUser>.GenerateRefreshToken();
         await store.SetTokenAsync(user, _options.Issuer, purpose, refreshToken, CancellationToken.None);
         await manager.UpdateAsync(user);
         return refreshToken;

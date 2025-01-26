@@ -27,13 +27,13 @@ public class AuthenticatlyClaimsMiddlewareTests
 
         req.Headers.Append("Authorization", "Bearer asdf");
 
-        RequestDelegate next = async (hc) => { await Task.CompletedTask; };
+        static async Task next(HttpContext hc) { await Task.CompletedTask; }
         var eccm = new AuthenticatlyClaimsMiddleware(next, tokenServiceMock.Object);
         await eccm.Invoke(httpContext);
 
         var res = httpContext.Items.TryGetValue(AuthenticatlyAuthConstants.AUTHORIZED_ATTRIBUTES_KEY, out var value);
 
-        Assert.AreEqual(true, res);
+        Assert.IsTrue(res);
         if (value is not Dictionary<string, string> authorizedAttributes)
         {
             Assert.Fail($"value is not {nameof(Dictionary<string, string>)}");

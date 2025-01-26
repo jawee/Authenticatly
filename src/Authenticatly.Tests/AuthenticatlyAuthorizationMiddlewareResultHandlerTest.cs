@@ -21,12 +21,12 @@ public class AuthenticatlyAuthorizationMiddlewareResultHandlerTest
         var handler = new AuthenticatlyAuthorizationMiddlewareResultHandler();
 
         var httpContext = new DefaultHttpContext();
-        var method = (RequestDelegate)((_) => { return Task.CompletedTask; });
+        static Task method(HttpContext _) { return Task.CompletedTask; }
         var polRes = PolicyAuthorizationResult.Success();
-        var authPolicy = new AuthorizationPolicy(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new List<string>());
+        var authPolicy = new AuthorizationPolicy([new AuthenticatlyAuthorizeRequirement()], []);
         await handler.HandleAsync(method, httpContext, authPolicy, polRes);
 
-        Assert.IsTrue(httpContext.Response.StatusCode == StatusCodes.Status200OK, $"{httpContext.Response.StatusCode} is not {StatusCodes.Status200OK}");
+        Assert.AreEqual(StatusCodes.Status200OK, httpContext.Response.StatusCode, $"{httpContext.Response.StatusCode} is not {StatusCodes.Status200OK}");
     }
 
     [TestMethod]
@@ -35,11 +35,11 @@ public class AuthenticatlyAuthorizationMiddlewareResultHandlerTest
         var handler = new AuthenticatlyAuthorizationMiddlewareResultHandler();
 
         var httpContext = new DefaultHttpContext();
-        var method = (RequestDelegate)((_) => { return Task.CompletedTask; });
+        static Task method(HttpContext _) { return Task.CompletedTask; }
         var polRes = PolicyAuthorizationResult.Forbid();
-        var authPolicy = new AuthorizationPolicy(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new List<string>());
+        var authPolicy = new AuthorizationPolicy([new AuthenticatlyAuthorizeRequirement()], []);
         await handler.HandleAsync(method, httpContext, authPolicy, polRes);
 
-        Assert.IsTrue(httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized, $"{httpContext.Response.StatusCode} is not {StatusCodes.Status401Unauthorized}");
+        Assert.AreEqual(StatusCodes.Status401Unauthorized, httpContext.Response.StatusCode, $"{httpContext.Response.StatusCode} is not {StatusCodes.Status401Unauthorized}");
     }
 }

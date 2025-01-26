@@ -34,7 +34,7 @@ public class TokenService : ITokenService
     {
         if (claims.Count == 0)
         {
-            throw new ArgumentNullException("No claims");
+            throw new ArgumentNullException(nameof(claims));
         }
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -64,7 +64,7 @@ public class TokenService : ITokenService
             ValidateLifetime = true,
         };
 
-        var claimsPrincipal = _tokenHandler.ValidateToken(token, parameters, out var validatedToken);
+        var claimsPrincipal = _tokenHandler.ValidateToken(token, parameters, out _);
 
         return claimsPrincipal;
     }

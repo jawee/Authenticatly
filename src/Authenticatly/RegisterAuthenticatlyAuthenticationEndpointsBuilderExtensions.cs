@@ -34,9 +34,9 @@ public class AuthenticatlyAuthOptions : IOptions<AuthenticatlyAuthOptions>
         {
             if (string.IsNullOrEmpty(AllowedRolesString))
             {
-                return new();
+                return [];
             }
-            return AllowedRolesString.Split(";").ToList();
+            return [.. AllowedRolesString.Split(";")];
         }
     }
 
@@ -46,15 +46,8 @@ public static class RegisterAuthenticatlyAuthenticationEndpointsBuilderExtension
 {
     public static IServiceCollection AddAuthenticatlyAuthentication<TUser>(this IServiceCollection services, Action<AuthenticatlyAuthOptions> setupAction) where TUser : IdentityUser
     {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        if (setupAction == null)
-        {
-            throw new ArgumentNullException(nameof(setupAction));
-        }
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(setupAction);
 
         services.Configure(setupAction);
 
@@ -82,7 +75,7 @@ public static class RegisterAuthenticatlyAuthenticationEndpointsBuilderExtension
 
     public static IdentityBuilder AddAuthenticatlyTokenProviders<TUser>(this IdentityBuilder builder, string issuer) where TUser : IdentityUser
     {
-        return builder.AddTokenProvider(issuer, typeof(AuthenticatlyRefreshTokenProvider<TUser>));
+        return builder.AddTokenProvider<AuthenticatlyRefreshTokenProvider<TUser>>(issuer);
     }
 
 
