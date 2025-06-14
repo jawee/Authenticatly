@@ -22,6 +22,7 @@ public class AuthenticatlyAuthorizationHandlerTest
         _logger = new Mock<ILogger<AuthenticatlyAuthorizationHandler>>();
         _tokenService = new Mock<ITokenService>();
     }
+
     [TestMethod]
     public async Task HandleAsync_ValidToken_HasSucceeded()
     {
@@ -30,7 +31,7 @@ public class AuthenticatlyAuthorizationHandlerTest
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers.Append("Authorization", new StringValues("Bearer asdfasdf"));
 
-        var authorizationHandlerContext = new AuthorizationHandlerContext(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new ClaimsPrincipal(), httpContext);
+        var authorizationHandlerContext = new AuthorizationHandlerContext([new AuthenticatlyAuthorizeRequirement()], new ClaimsPrincipal(), httpContext);
 
         await handler.HandleAsync(authorizationHandlerContext);
 
@@ -46,7 +47,7 @@ public class AuthenticatlyAuthorizationHandlerTest
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers.Append("Authorization", new StringValues("Bearer asdfasdf"));
 
-        var authorizationHandlerContext = new AuthorizationHandlerContext(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new ClaimsPrincipal(), httpContext);
+        var authorizationHandlerContext = new AuthorizationHandlerContext([new AuthenticatlyAuthorizeRequirement()], new ClaimsPrincipal(), httpContext);
 
         await handler.HandleAsync(authorizationHandlerContext);
 
@@ -63,7 +64,7 @@ public class AuthenticatlyAuthorizationHandlerTest
         var handler = new AuthenticatlyAuthorizationHandler(_logger.Object, _tokenService.Object);
         var httpContext = new DefaultHttpContext();
 
-        var authorizationHandlerContext = new AuthorizationHandlerContext(new List<IAuthorizationRequirement> { new AuthenticatlyAuthorizeRequirement() }, new ClaimsPrincipal(), httpContext);
+        var authorizationHandlerContext = new AuthorizationHandlerContext([new AuthenticatlyAuthorizeRequirement()], new ClaimsPrincipal(), httpContext);
 
         await handler.HandleAsync(authorizationHandlerContext);
 
