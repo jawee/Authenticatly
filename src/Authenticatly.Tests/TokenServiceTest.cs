@@ -53,7 +53,7 @@ public class TokenServiceTest
     {
         _user.Email = null;
 
-        Assert.ThrowsException<ArgumentNullException>(() => _service.CreateTokenForUser(_user, new List<Claim>()));
+        Assert.ThrowsExactly<ArgumentNullException>(() => _service.CreateTokenForUser(_user, []));
     }
 
     [TestMethod]
@@ -71,7 +71,7 @@ public class TokenServiceTest
     {
         var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE2NjI1NDcwNjAsImV4cCI6MTY2MjU0NzM1OSwiaWF0IjoxNjYyNTQ3MDU5LCJpc3MiOiJFYXN0Q29hc3QiLCJhdWQiOiJBdWRpZW5jZSJ9.VqK0dUWVN5WSsWoKRDrvL4yUQczLrnXiQYWsR413Sok";
 
-        Assert.ThrowsException<KeyNotFoundException>(() => _service.GetUserEmailFromToken(token));
+        Assert.ThrowsExactly<KeyNotFoundException>(() => _service.GetUserEmailFromToken(token));
     }
 
     [TestMethod]
