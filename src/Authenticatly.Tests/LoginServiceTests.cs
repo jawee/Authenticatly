@@ -59,7 +59,7 @@ public class LoginServiceTests
     [TestMethod]
     public async Task Login_NoExistingUser_ThrowsLoginFailedException()
     {
-        await Assert.ThrowsExceptionAsync<LoginFailedException>(async () => await _loginService.Login(_authReq, _userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
+        await Assert.ThrowsAsync<LoginFailedException>(async () => await _loginService.Login(_authReq, _userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
     }
 
     [TestMethod]
@@ -116,7 +116,7 @@ public class LoginServiceTests
             };
             _optionsAccessor = Options.Create(authOpts);
 
-        await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Login(_authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
+        await Assert.ThrowsAsync<UnauthorizedException>(async () => await _loginService.Login(_authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
     }
 
 
@@ -144,7 +144,7 @@ public class LoginServiceTests
             };
             _optionsAccessor = Options.Create(authOpts);
 
-        await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Login(_authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
+        await Assert.ThrowsAsync<UnauthorizedException>(async () => await _loginService.Login(_authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
     }
 
     [TestMethod]
@@ -180,7 +180,7 @@ public class LoginServiceTests
 
         _mfaTokenServiceMock.Setup(m => m.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync("userid");
 
-        await Assert.ThrowsExceptionAsync<OtpInvalidException>(async () => await _loginService.Login(authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
+        await Assert.ThrowsAsync<OtpInvalidException>(() => _loginService.Login(authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
     }
 
     [TestMethod]
@@ -193,7 +193,7 @@ public class LoginServiceTests
 
         var authReq = new AuthenticateRequest(EMAIL, PASSWORD, null, null, null, null);
 
-        await Assert.ThrowsExceptionAsync<MfaEnabledException>(async () => await _loginService.Login(authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
+        await Assert.ThrowsAsync<MfaEnabledException>(() => _loginService.Login(authReq, userManagerMock.Object, _tokenServiceMock.Object, _optionsAccessor));
     }
 
 
@@ -229,7 +229,7 @@ public class LoginServiceTests
         };
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync("");
 
-        await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
+        await Assert.ThrowsAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
     }
 
     [TestMethod]
@@ -242,7 +242,7 @@ public class LoginServiceTests
         };
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync(USER_ID);
 
-        await Assert.ThrowsExceptionAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
+        await Assert.ThrowsAsync<UnauthorizedException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
     }
 
     [TestMethod]
@@ -256,7 +256,7 @@ public class LoginServiceTests
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync(USER_ID);
         _userManagerMock.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new IdentityUser { Id = USER_ID });
 
-        await Assert.ThrowsExceptionAsync<UnsupportedChallengeTypeException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
+        await Assert.ThrowsAsync<UnsupportedChallengeTypeException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
     }
     [TestMethod]
     public async Task Challenge_UnknownChallengeType_ThrowsUnsupportedChallengeTypeException()
@@ -269,7 +269,7 @@ public class LoginServiceTests
         _mfaTokenServiceMock.Setup(s => s.GetUserIdFromMfaToken(It.IsAny<string>())).ReturnsAsync(USER_ID);
         _userManagerMock.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new IdentityUser { Id = USER_ID });
 
-        await Assert.ThrowsExceptionAsync<UnsupportedChallengeTypeException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
+        await Assert.ThrowsAsync<UnsupportedChallengeTypeException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
     }
 
     [TestMethod]
@@ -286,7 +286,7 @@ public class LoginServiceTests
         _sendSmsServiceMock.Setup(s => s.SendSms(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
         _userManagerMock.Setup(s => s.GenerateTwoFactorTokenAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync("token");
 
-        await Assert.ThrowsExceptionAsync<ForbiddenException>(async () => await _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
+        await Assert.ThrowsAsync<ForbiddenException>(() => _loginService.Challenge(req, _userManagerMock.Object, _mfaTokenServiceMock.Object, _sendSmsServiceMock.Object));
     }
 
     [TestMethod]
